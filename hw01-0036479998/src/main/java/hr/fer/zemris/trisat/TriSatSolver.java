@@ -57,8 +57,23 @@ public class TriSatSolver	 {
 			break;
 		
 		case 3:
-			SATIterateExtended itE = new SATIterateExtended(formula);
+			SATIterateCorrecteFit itE = new SATIterateCorrecteFit(formula);
 			System.out.println(itE.getSolution());
+			break;
+			
+		case 4:
+			GSAT gsat = new GSAT(formula);
+			System.out.println(gsat.getSolution());
+			break;
+		
+		case 5:
+			RandomWalkSAT rws = new RandomWalkSAT(formula);
+			System.out.println(rws.getSolution());
+			break;
+		
+		case 6:
+			SATIterateExtended sie = new SATIterateExtended(formula);
+			System.out.println(sie.getSolution());
 			break;
 			
 		default:

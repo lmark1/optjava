@@ -7,7 +7,7 @@ import hr.fer.zemris.trisat.model.BitVector;
 import hr.fer.zemris.trisat.model.SATFormula;
 
 /**
- * Solves sat problem using brute force.
+ * Solves sat problem using brute force. Checks all possible combinations.
  * 
  * @author lmark
  *

@@ -12,6 +12,7 @@ import hr.fer.zemris.trisat.model.SATFormulaStats;
 
 /**
  * Iterative greedy search algorithm. 
+ * Implements basic iterative search algorithm.
  * Generates initial solution randomly. Uses best neighbours for next iterations.
  * Fitness function: numberOfSatisfiedClauses / numberOfTotalClauses.	
  * 
@@ -21,11 +22,12 @@ import hr.fer.zemris.trisat.model.SATFormulaStats;
 public class SATIterate {
 	
 	public static final int MAX_ITER = 100000;
+	public static int MAX_STUCK_COUNT = 100;
+	
 	public static final Random r = new Random();
 	
 	private SATFormula formula;
 	private SATFormulaStats formulaStats;
-	private boolean enableStop = true;
 	
 	public SATIterate(SATFormula formula) {
 		this.formula = formula;
@@ -38,11 +40,29 @@ public class SATIterate {
 	public String getSolution() {
 		
 		// Generate a random initial solution
-		BitVector solution = new BitVector(
+		BitVector initialSolution = new BitVector(
 				r, 
 				formula.getNumberOfVariables());
 		
+		BitVector solution = runLocalSearch(initialSolution);
+				
+		formulaStats.setAssignment(solution, false);
+		if (formulaStats.isSatisfied()) {
+			return "Solution found:\n" + solution;
+		} else {
+			return "Incomplete solution found:\n" + solution;
+		}
+	}
+	
+	/**
+	 * Runs local search around the given solution.
+	 * 
+	 * @param solution
+	 * @return Returns solution if one is found or stuck in local optimum.
+	 */
+	public BitVector runLocalSearch(BitVector solution) {
 		int t = 0;
+		int stuckCount = 0;
 		while(t < MAX_ITER) {
 			
 			// Evaulate root assignment
@@ -50,7 +70,7 @@ public class SATIterate {
 			
 			// Check if solution is found
 			if (formulaStats.isSatisfied()) {
-				return "Found solution:\n" + solution.toString();
+				return solution;
 			}
 			
 			// Caluclate solution fit
@@ -58,11 +78,14 @@ public class SATIterate {
 			
 			// Generate neighbours
 			List<MutableBitVector> bestNeighbours = getNeighbours(solution);
-			double bestNFit = getFitness(bestNeighbours.get(0));
 			
-			// If best nFit is less then root fit we're stuck
-			if (enableStop && bestNFit < rootFit) {
-				return "Stuck in local optimum";
+			// Check if algorithm is stuck
+			double bestNFit = getFitness(bestNeighbours.get(0));
+			if (isStuck(bestNFit, rootFit, stuckCount)) {
+				System.out.println("Stuck in local optimum");
+				return solution;
+			} else if (Math.abs(bestNFit - rootFit) < 10e-10) {
+				stuckCount++;
 			}
 			
 			// Pick a random solution from bestneighbours
@@ -79,9 +102,20 @@ public class SATIterate {
 			t++;
 		}
 		
-		return "Max iterations exceeded, no solution found";
+		System.out.println("Max iterations passed");
+		return solution;
 	}
 	
+	/**
+	 * @param bestNFit Best neighbour fit.
+	 * @param rootFit Best root parent fit.
+	 * @param stuckCount Number of iterations algorithm is on the same fitness.
+	 * @return True if algorithm is stuck and should exit, false otherwise.
+	 */
+	public boolean isStuck(double bestNFit, double rootFit, int stuckCount) {
+		return (bestNFit < rootFit) || (stuckCount > MAX_STUCK_COUNT);
+	}
+
 	/**
 	 * @param root
 	 * @return Returns a neighbourhood around the root solution.
@@ -115,14 +149,14 @@ public class SATIterate {
 	 */
 	public double getFitness(BitVector solution) {
 		formulaStats.setAssignment(solution, false);
-		return formulaStats.getFit();
+		return formulaStats.getFitness();
 	}
 	
 	public SATFormulaStats getFormulaStats() {
 		return formulaStats;
 	}
 	
-	public void setEnableStop(boolean enableStop) {
-		this.enableStop = enableStop;
+	public SATFormula getFormula() {
+		return formula;
 	}
 }

@@ -1,5 +1,7 @@
 package hr.fer.zemris.trisat.model;
 
+import java.util.Random;
+
 /**
  * This class analyzes statistics from SATFormula objects.
  * 
@@ -72,16 +74,47 @@ public class SATFormulaStats {
 	}
 	
 	/**
+	 * @return Returns a number of unsatisfid clauses.
+	 */
+	public int getNumberOfUnsatisfied() {
+		return formula.getNumberOfClauses() - numberOfSatisfied;
+	}
+	
+	/**
+	 * @return Returns a random unsatisfied clause.
+	 */
+	public Clause getRandomUnsatifiedClause() {
+		Random r = new Random();
+		
+		int min = 1;
+		int max = getNumberOfUnsatisfied();
+		int randomIndex = r.nextInt((max-min) + 1) + min;
+		
+		int unsatisfiedCount = 0;
+		for(int i = 0, count = formula.getNumberOfClauses(); i < count; i++) {
+			if (!formula.getClause(i).isSatisfied(assignment)) {
+				unsatisfiedCount++;
+			}
+			
+			if (unsatisfiedCount == randomIndex) {
+				return formula.getClause(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * @return Returns fitness values as quotient of satisfied and total clauses.
 	 */
-	public double getFit() {
+	public double getFitness() {
 		return ((double) numberOfSatisfied) / formula.getNumberOfClauses(); 
 	}
 	
 	/**
 	 * @return Returns a fitness value while taking in account success rates of each clause.
 	 */
-	public double getCorrectedFit() {
+	public double getCorrectedFitness() {
 		return numberOfSatisfied + getPercentageBonus();
 	}
 	
