@@ -13,7 +13,7 @@ import hr.fer.zemris.trisat.model.SATFormula;
 public class SATIterateExtended extends SATIterate{
 
 	public static final int MAX_TRIES = 100;
-	public static final double flipPercent = 0.6;
+	public static final double flipPercent = 0.3;
 	
 	public SATIterateExtended(SATFormula formula) {
 		super(formula);

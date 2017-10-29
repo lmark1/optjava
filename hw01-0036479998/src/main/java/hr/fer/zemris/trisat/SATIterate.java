@@ -94,10 +94,8 @@ public class SATIterate {
 			int randomIndex = r.nextInt((max-min) + 1) + min;
 			
 			solution = bestNeighbours.get(randomIndex);
-//			System.out.println("Best fit: " + bestNFit + 
-//					" Root fit: " + rootFit + 
-//					" Best neighbour count: " + bestNeighbours.size() + 
-//					" \nSol: " + solution + "\n");
+//			System.out.println(String.format("Fit: %2f, Unsatisfied: %d",
+//					getFitness(solution), getUnsatisfied(solution)));
 			
 			t++;
 		}
@@ -150,6 +148,11 @@ public class SATIterate {
 	public double getFitness(BitVector solution) {
 		formulaStats.setAssignment(solution, false);
 		return formulaStats.getFitness();
+	}
+	
+	public int getUnsatisfied(BitVector solution) {
+		formulaStats.setAssignment(solution, false);
+		return formulaStats.getNumberOfUnsatisfied();
 	}
 	
 	public SATFormulaStats getFormulaStats() {

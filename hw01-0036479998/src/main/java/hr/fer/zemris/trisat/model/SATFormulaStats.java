@@ -59,7 +59,7 @@ public class SATFormulaStats {
 			
 			if (updatePercentages) {
 				post[i] = satisfied ? 
-						(1-post[i])*percentageConstantUp :
+						post[i] + (1-post[i])*percentageConstantUp :
 							post[i] + (0 - post[i])*percentageConstantDown;
 			}
 		}

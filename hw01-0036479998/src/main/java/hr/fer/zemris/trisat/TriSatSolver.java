@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import hr.fer.zemris.trisat.model.BitVector;
 import hr.fer.zemris.trisat.model.SATFormula;
 
 /**
@@ -80,5 +81,6 @@ public class TriSatSolver	 {
 			System.out.println("First argument is number of algorithm: 1-6");
 			return;
 		}
+		
 	}
 }

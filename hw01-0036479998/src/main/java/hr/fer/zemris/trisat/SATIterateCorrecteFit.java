@@ -22,7 +22,7 @@ import hr.fer.zemris.trisat.model.SATFormula;
  */
 public class SATIterateCorrecteFit extends SATIterate{
 
-	private static final int numberOfBest = 8;
+	private static final int numberOfBest = 2;
 	private final Comparator<MutableBitVector> c = new Comparator<MutableBitVector>() {
 		
 		@Override
@@ -50,6 +50,9 @@ public class SATIterateCorrecteFit extends SATIterate{
 		return getFormulaStats().getCorrectedFitness();
 	}
 	
+	/**
+	 * Returns best neighbours.
+	 */
 	@Override
 	public List<MutableBitVector> getNeighbours(BitVector root) {
 		// Generate a neighbourhood of solutions
