@@ -1,0 +1,53 @@
+GSAT(klauzule,varijable,MAX-FLIPS,MAX-TRIES)
+for restart = 1 do MAX-TRIES
+  T = random dodjela varijabli
+  for promjena = 1 do MAX-FLIPS
+    ako T zadovoljava klauzule, vrati T
+    V je varijabla čijom promjenom dobivam minimalni broj nezadovoljenih klauzula
+    ako V nije jedinstven, random odaberi jedan
+    promijeni u T vrijednost varijable V
+  kraj
+kraj
+vrati "dodjela nije pronađena"
+
+RandomWalkSAT(klauzule,varijable,MAX-FLIPS,MAX-TRIES)
+--------------------------------------------------------------------
+Ideja: u svakom koraku:
+  random odaberi jednu nezadovoljenu klauzulu
+  +- s vjerojatnošću p random okreni jednu varijablu u toj klauzuli
+  +- s vjerojatnošću (1-p) okreni onu varijablu koja rezultira 
+     novom dodjelom s minimalnim brojem nezadovoljenih klauzula
+--------------------------------------------------------------------
+for restart = 1 do MAX-TRIES
+  T = random dodjela varijabli
+  for promjena = 1 do MAX-FLIPS
+    ako T zadovoljava klauzule, vrati T
+    random odaberi jednu nezadovoljenu klauzulu
+    +- s vjerojatnošću p random okreni jednu varijablu u toj klauzuli
+    +- s vjerojatnošću (1-p) okreni onu varijablu koja rezultira 
+     novom dodjelom s minimalnim brojem nezadovoljenih klauzula
+  kraj
+kraj
+vrati "dodjela nije pronađena"
+
+
+
+
+
+***************************************************************
+Domaća zadaća - dopuna zadaći 01-iter.pdf
+***************************************************************
+Zadatak 4: implementirati i isprobati GSAT; uočite da je on nadogradnja zadatka 2,
+           kao Multistart Local Search.
+
+Zadatak 5: implementirati RandomWalkSAT; primjetite da je to Multistart Local Search
+           kod kojeg lokalna pretraga nije deterministički pohlepna.
+
+Zadatak 6: implementirati i isprobati inačicu Iterated Local Search, kod koje,
+           nakon što algoritam zapne, random promijenite određen postatak nasumično
+           odabranih varijabli, pa krenete u novi krug, koristeći pretragu iz zadatka 2
+           kao lokalnu pretragu
+
+Opaska: Algoritam 3 ("zadatak 3") iz upute također se može dodatno preoblikovati u MLS ili ILS
+        varijantu.
+
